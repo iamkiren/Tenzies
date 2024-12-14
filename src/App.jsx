@@ -5,6 +5,7 @@ import Confetti from "react-confetti";
 
 export default function App() {
   const [dice, setDice] = useState(() => generateAllNewDice());
+  const [showConfetti, setShowConfetti] = useState(false);
   const buttonRef = useRef(null);
 
   const gameWon =
@@ -14,6 +15,12 @@ export default function App() {
   useEffect(() => {
     if (gameWon) {
       buttonRef.current.focus();
+      setShowConfetti(true);
+      const timer = setTimeout(() => {
+        setShowConfetti(false);
+      }, 10 * 1000);
+
+      return () => clearTimeout(timer);
     }
   }, [gameWon]);
 
@@ -56,7 +63,7 @@ export default function App() {
 
   return (
     <main>
-      {gameWon && <Confetti />}
+      {showConfetti && <Confetti />}
       <div aria-live="polite" className="sr-only">
         {gameWon && (
           <p>Congratulations! You won! Press "New Game" to start again.</p>
